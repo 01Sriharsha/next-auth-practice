@@ -37,10 +37,10 @@ export const LoginForm = ({}: LoginFormProps) => {
     startTransition(async () => {
       login(values)
         .then((res) => {
-          toast.success(res.success);
+          toast.success(res?.success);
         })
         .catch((err) => {
-          toast.error(err.error);
+          toast.error(err.message);
         });
     });
   };

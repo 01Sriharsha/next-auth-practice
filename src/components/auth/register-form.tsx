@@ -41,7 +41,7 @@ export const RegisterForm = ({}: RegisterFormProps) => {
           toast.success(res.success);
         })
         .catch((err) => {
-          toast.error(err.error);
+          toast.error(err.message);
         });
     });
   };
