@@ -43,7 +43,7 @@ export const CardWrapper = ({
         )}
         <div className="flex items-center gap-x-1 text-sm">
           <p>{forwardDescription}</p>
-          <Link href={forwardLink} className="underline">
+          <Link href={forwardLink} className="underline" replace>
             {forwardLabel}
           </Link>
         </div>

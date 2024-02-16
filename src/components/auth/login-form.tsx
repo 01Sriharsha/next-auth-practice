@@ -1,7 +1,9 @@
 // A reusable component which can be used in both inside a modal or in a separate page
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,13 +18,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema, LoginSchemaType } from "@/schemas";
 import { login } from "@/actions/login-action";
 import { CardWrapper } from "@/components/auth/card-wrapper";
+import { FormError } from "./form-error";
 
 type LoginFormProps = {};
 
 export const LoginForm = ({}: LoginFormProps) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -32,15 +38,26 @@ export const LoginForm = ({}: LoginFormProps) => {
   });
 
   const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState("");
+  const oauthError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with different provider!!"
+      : "";
+
+  useEffect(() => {
+    searchParams.get("error") === "OAuthAccountNotLinked" &&
+      setError("Email already in use with different provider!!");
+  }, [searchParams]);
 
   const onSubmit = (values: LoginSchemaType) => {
     startTransition(async () => {
       login(values)
-        .then((res) => {
-          toast.success(res?.success);
+        .then(() => {
+          toast.success("Logged in successfully");
+          router.replace(DEFAULT_LOGIN_REDIRECT);
         })
         .catch((err) => {
-          toast.error(err.message);
+          setError(err.message || "Something went wrong!");
         });
     });
   };
@@ -93,6 +110,7 @@ export const LoginForm = ({}: LoginFormProps) => {
               )}
             />
           </div>
+          {error && <FormError error={error || oauthError} />}
           <Button type="submit" disabled={isPending} className="w-full">
             Login
           </Button>
