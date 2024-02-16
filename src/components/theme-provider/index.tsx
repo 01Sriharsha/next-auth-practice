@@ -14,7 +14,7 @@ export type Theme = "dark" | "light" | "system";
 const setLocalTheme = (value: string) => localStorage.setItem("__theme", value);
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>("system");
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
     const localTheme = localStorage.getItem("__theme") as Theme;
