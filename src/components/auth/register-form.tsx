@@ -1,9 +1,8 @@
 // A reusable component which can be used in both inside a modal or in a separate page
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -19,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { RegisterSchema, RegisterSchemaType } from "@/schemas";
 import { register } from "@/actions/register-action";
 import { CardWrapper } from "@/components/auth/card-wrapper";
+import { FormError } from "@/components/auth/form-error";
+import { FormSuccess } from "@/components/auth/form-success";
 
 type RegisterFormProps = {};
 
@@ -33,15 +34,19 @@ export const RegisterForm = ({}: RegisterFormProps) => {
   });
 
   const [isPending, startTransition] = useTransition();
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
   const onSubmit = (values: RegisterSchemaType) => {
     startTransition(async () => {
       register(values)
         .then((res) => {
-          toast.success(res.success);
+          setError("");
+          setSuccess(res?.success);
         })
         .catch((err) => {
-          toast.error(err.message);
+          setSuccess("");
+          setError(err.message || "Something went wrong!");
         });
     });
   };
@@ -110,6 +115,8 @@ export const RegisterForm = ({}: RegisterFormProps) => {
               )}
             />
           </div>
+          {error && <FormError error={error} />}
+          {success && <FormSuccess success={success} />}
           <Button type="submit" disabled={isPending} className="w-full">
             Create an account
           </Button>
