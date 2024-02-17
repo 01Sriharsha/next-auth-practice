@@ -3,7 +3,9 @@
 import { hash } from "bcryptjs";
 import { RegisterSchema, RegisterSchemaType } from "@/schemas";
 import { db } from "@/lib/db";
+import { sendVerificationEmail } from "@/lib/mail";
 import { getUserByEmail } from "@/util/user";
+import { generateVerificationToken } from "@/util/verification-token";
 
 export const register = async (values: RegisterSchemaType) => {
   const parsedData = RegisterSchema.safeParse(values);
@@ -34,5 +36,13 @@ export const register = async (values: RegisterSchemaType) => {
     throw new Error("Failed to create user");
   }
 
-  return { success: "Email sent" };
+  const verificationToken = await generateVerificationToken(user.email!);
+  const res = await sendVerificationEmail(user.email!, verificationToken.token);
+
+  if (res.error) {
+    console.error("Email confirmation error: ", res.error);
+    throw new Error("Failed to send confirmation email");
+  }
+
+  return { success: "Confirmation Email sent" };
 };

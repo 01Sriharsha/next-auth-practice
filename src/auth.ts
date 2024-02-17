@@ -28,6 +28,24 @@ export const {
     },
   },
   callbacks: {
+    async signIn({ user, account }) {
+      //Allow sigin for oauth login
+      if (account?.provider !== "credentials") {
+        return true;
+      }
+
+      const existingUser = await getUserById(user.id!);
+
+      if (!existingUser || !existingUser.password) {
+        return false;
+      }
+
+      if (!existingUser.emailVerified) {
+        return false;
+      }
+
+      return true;
+    },
     async jwt({ token }) {
       if (token.sub) {
         const user = await getUserById(token.sub);

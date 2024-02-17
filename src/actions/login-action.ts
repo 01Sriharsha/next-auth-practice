@@ -3,6 +3,8 @@
 import { AuthError } from "next-auth";
 import { signIn } from "@/auth";
 import { LoginSchema, LoginSchemaType } from "@/schemas";
+import { getUserByEmail } from "@/util/user";
+import { generateVerificationToken } from "@/util/verification-token";
 
 export const login = async (values: LoginSchemaType) => {
   const parsedData = LoginSchema.safeParse(values);
@@ -12,6 +14,19 @@ export const login = async (values: LoginSchemaType) => {
   }
 
   const { email, password } = parsedData.data;
+
+  const existingUser = await getUserByEmail(email);
+
+  if (!existingUser || !existingUser.email || !existingUser.password) {
+    throw new Error("Email does not exists!");
+  }
+
+  if (!existingUser.emailVerified) {
+    const verficationToken = await generateVerificationToken(
+      existingUser.email
+    );
+    return { success: "Confirmation email sent!" };
+  }
 
   try {
     await signIn("credentials", {
