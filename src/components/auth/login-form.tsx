@@ -23,6 +23,7 @@ import { login } from "@/actions/login-action";
 import { CardWrapper } from "@/components/auth/card-wrapper";
 import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
+import Link from "next/link";
 
 type LoginFormProps = {};
 
@@ -44,6 +45,10 @@ export const LoginForm = ({}: LoginFormProps) => {
   const oauthError = useCallback(() => {
     searchParams.get("error") === "OAuthAccountNotLinked" &&
       setError("Email already in use with different provider!!");
+    searchParams.get("success") === "EmailVerified" &&
+      setSuccess("Email verified!!");
+    searchParams.get("success") === "PasswordUpdated" &&
+      setSuccess("Password Updated!!");
   }, [searchParams]);
 
   useEffect(() => {
@@ -112,6 +117,14 @@ export const LoginForm = ({}: LoginFormProps) => {
                 </FormItem>
               )}
             />
+            <Button
+              type="button"
+              variant={"link"}
+              className="text-sm text-gray-600 px-1"
+              asChild
+            >
+              <Link href={"/auth/reset"}>Forgot Password?</Link>
+            </Button>
           </div>
           {error && <FormError error={error} />}
           {success && <FormSuccess success={success} />}

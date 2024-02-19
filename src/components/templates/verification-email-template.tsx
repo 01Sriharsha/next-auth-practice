@@ -15,12 +15,10 @@ import {
 
 type VerificationEmailTemplateProps = {
   confirmationLink: string;
-  token: string;
   email: string;
 };
 
 export const VerificationEmailTemplate = ({
-  token,
   confirmationLink,
 }: VerificationEmailTemplateProps) => {
   return (

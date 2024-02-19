@@ -2,6 +2,7 @@ import { Resend } from "resend";
 
 import { AppTitle, AppUrl } from "@/lib/app-constants";
 import { VerificationEmailTemplate } from "@/components/templates/verification-email-template";
+import { ResetPasswordEmailTemplate } from "@/components/templates/reset-password-email-template";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -11,7 +12,19 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     from: `${AppTitle} <onboarding@resend.dev>`,
     to: email,
     subject: `Your email verification link for ${AppTitle}`,
-    react: VerificationEmailTemplate({ token, confirmationLink, email }),
+    react: VerificationEmailTemplate({ confirmationLink, email }),
+  });
+
+  return res;
+};
+
+export const sendPasswordResetEmail = async (email: string, token: string) => {
+  const resetPasswordLink = `${AppUrl}/auth/new-password?token=${token}`;
+  const res = await resend.emails.send({
+    from: `${AppTitle} <onboarding@resend.dev>`,
+    to: email,
+    subject: `Reset password verification link for ${AppTitle}`,
+    react: ResetPasswordEmailTemplate({ resetPasswordLink, email }),
   });
 
   return res;

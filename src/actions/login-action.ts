@@ -5,6 +5,7 @@ import { signIn } from "@/auth";
 import { LoginSchema, LoginSchemaType } from "@/schemas";
 import { getUserByEmail } from "@/util/user";
 import { generateVerificationToken } from "@/util/verification-token";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const login = async (values: LoginSchemaType) => {
   const parsedData = LoginSchema.safeParse(values);
@@ -22,8 +23,12 @@ export const login = async (values: LoginSchemaType) => {
   }
 
   if (!existingUser.emailVerified) {
-    const verficationToken = await generateVerificationToken(
+    const verificationToken = await generateVerificationToken(
       existingUser.email
+    );
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
     );
     return { success: "Confirmation email sent!" };
   }
