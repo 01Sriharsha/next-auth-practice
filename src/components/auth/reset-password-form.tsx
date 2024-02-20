@@ -18,7 +18,6 @@ import { CardWrapper } from "@/components/auth/card-wrapper";
 import { FormError } from "@/components/auth/form-error";
 import { FormSuccess } from "@/components/auth/form-success";
 import { resetPassword } from "@/actions/reset-password-action";
-import Image from "next/image";
 
 type ResetPasswordFormProps = {};
 
@@ -49,7 +48,6 @@ export const ResetPasswordForm = ({}: ResetPasswordFormProps) => {
 
   return (
     <div>
-      <Image src={''} alt="logo" width={200} height={200} className="" />
       <CardWrapper
         headerLabel="Reset Password"
         forwardLabel="Login"

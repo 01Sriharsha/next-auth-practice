@@ -26,7 +26,13 @@ export const ResetPasswordEmailTemplate = ({
       <Preview>{AppTitle} - reset your password</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Img src={AppLogoUrl} width="40" height="33" alt="Dropbox" />
+          <Img
+            src={AppLogoUrl}
+            width="50"
+            height="50"
+            alt={AppTitle}
+            className="object-cover rounded-full"
+          />
           <Section>
             <Text style={text}>Hi, {email.split("@")[0]}</Text>
             <Text style={text}>

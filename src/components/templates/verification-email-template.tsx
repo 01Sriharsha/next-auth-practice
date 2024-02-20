@@ -34,9 +34,10 @@ export const VerificationEmailTemplate = ({
             >
               <Img
                 src={AppLogoUrl}
-                width="42"
-                height="42"
-                alt="Next-Auth-Toolkit"
+                width="50"
+                height="50"
+                alt={AppTitle}
+                className="object-cover rounded-full"
               />
               <Text>{AppTitle}</Text>
             </Section>
