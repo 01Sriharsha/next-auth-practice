@@ -1,8 +1,11 @@
 import { Resend } from "resend";
 
 import { AppTitle, AppUrl } from "@/lib/app-constants";
-import { VerificationEmailTemplate } from "@/components/templates/verification-email-template";
-import { ResetPasswordEmailTemplate } from "@/components/templates/reset-password-email-template";
+import {
+  TwoFactorEmailTemplate,
+  VerificationEmailTemplate,
+  ResetPasswordEmailTemplate,
+} from "@/components/templates";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -25,6 +28,20 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     to: email,
     subject: `Reset password verification link for ${AppTitle}`,
     react: ResetPasswordEmailTemplate({ resetPasswordLink, email }),
+  });
+
+  return res;
+};
+
+export const sendTwoFactorEmail = async (
+  email: string,
+  validationCode: string
+) => {
+  const res = await resend.emails.send({
+    from: `${AppTitle} <onboarding@resend.dev>`,
+    to: email,
+    subject: `Two factor authentication code for ${AppTitle}`,
+    react: TwoFactorEmailTemplate({ validationCode }),
   });
 
   return res;
