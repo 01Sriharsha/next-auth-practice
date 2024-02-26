@@ -98,6 +98,7 @@ export const LoginForm = ({}: LoginFormProps) => {
                         type="text"
                         placeholder="000000"
                         disabled={isPending}
+                        autoComplete="off"
                       />
                     </FormControl>
                     <FormMessage />

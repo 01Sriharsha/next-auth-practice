@@ -10,14 +10,16 @@ import { Separator } from "@/components/ui/separator";
 
 import { Header } from "@/components/auth/header";
 import { Social } from "@/components/auth/social";
+import { cn } from "@/lib/utils";
 
 type CardWrapperProps = {
   children: ReactNode;
   headerLabel: string;
-  forwardLabel: string;
-  forwardLink: string;
-  forwardDescription: string;
+  forwardLabel?: string;
+  forwardLink?: string;
+  forwardDescription?: string;
   showSocial?: boolean;
+  className?: string;
 };
 
 export const CardWrapper = ({
@@ -27,9 +29,10 @@ export const CardWrapper = ({
   forwardDescription,
   headerLabel,
   showSocial,
+  className,
 }: CardWrapperProps) => {
   return (
-    <Card className="w-[400px] shadow-md">
+    <Card className={cn("shadow-md", className ?? "w-[400px]")}>
       <CardHeader>
         <Header label={headerLabel} />
       </CardHeader>
@@ -43,7 +46,7 @@ export const CardWrapper = ({
         )}
         <div className="flex items-center gap-x-1 text-sm">
           <p>{forwardDescription}</p>
-          <Link href={forwardLink} className="underline" replace>
+          <Link href={forwardLink || "/"} className="underline" replace>
             {forwardLabel}
           </Link>
         </div>

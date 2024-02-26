@@ -65,13 +65,11 @@ export const login = async (values: LoginSchemaType) => {
           where: { id: existingConfirmation.id },
         });
       }
-
-      const tf = await db.twoFactorConfirmation.create({
+      await db.twoFactorConfirmation.create({
         data: {
           userId: existingUser.id,
         },
       });
-      console.log({ tf });
     } else {
       const validationCode = await generateTwoFactorToken(email);
       await sendTwoFactorEmail(email, validationCode.token);
