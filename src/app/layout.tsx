@@ -5,12 +5,13 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 
 import { auth } from "@/auth";
+import { AppTitle } from "@/lib/app-constants";
 import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "NextAuth Toolkit",
+  title: AppTitle,
   description: "A toolkit for adding authentication to the Next.js projects",
 };
 

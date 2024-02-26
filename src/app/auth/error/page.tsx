@@ -1,3 +1,4 @@
+import { AppTitle } from "@/lib/app-constants";
 import { CardWrapper } from "@/components/auth/card-wrapper";
 
 export default async function AuthErrorPage() {
@@ -16,3 +17,8 @@ export default async function AuthErrorPage() {
     </div>
   );
 }
+
+export const metadata = {
+  title: `Error | ${AppTitle}`,
+  description: `Oops! Something went wrong!!`,
+};
