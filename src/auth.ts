@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "@/auth.config";
 import { db } from "@/lib/db";
-import { getUserById } from "@/util/user";
+import { getOAuthUserAccount, getUserById } from "@/util/user";
 import { getTwoFactorConfirmationByUserId } from "@/util/two-factor-confirmation";
 
 export const {
@@ -50,13 +50,7 @@ export const {
         const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
           existingUser.id
         );
-        console.log({twoFactorConfirmation});
-        
         if (!twoFactorConfirmation) return false;
-
-        await db.twoFactorConfirmation.delete({
-          where: { id: twoFactorConfirmation.id },
-        });
       }
 
       return true;
@@ -65,7 +59,14 @@ export const {
       if (token.sub) {
         const user = await getUserById(token.sub);
         if (!user) return token;
+        const oAuthUser = await getOAuthUserAccount(token.sub);
+
+        token.isOAuth = !!oAuthUser;
         token.role = user.role;
+        token.isTwoFactorEnabled = user.isTwoFactorEnabled!;
+        token.email = user.email;
+        token.name = user.name;
+        token.picture = null;
       }
       return token;
     },
@@ -73,6 +74,10 @@ export const {
       if (token.sub && session.user) {
         session.user.id = token.sub;
         session.user.role = token.role;
+        session.user.email = token.email!;
+        session.user.name = token.name!;
+        session.user.isOAuth = token.isOAuth;
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled;
       }
       return session;
     },

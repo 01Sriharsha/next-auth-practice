@@ -35,7 +35,19 @@ export const NewPasswordSchema = z
     path: ["confirmPassword"],
   });
 
+export const UserDetailsSchema = z.object({
+  name: z
+    .string()
+    .min(1, {
+      message: "Name is required",
+    })
+    .optional(),
+  twoFactorEnable: z.boolean().optional(),
+  image: z.string().optional(),
+});
+
 export type LoginSchemaType = z.infer<typeof LoginSchema>;
 export type RegisterSchemaType = z.infer<typeof RegisterSchema>;
 export type ResetSchemaType = z.infer<typeof ResetSchema>;
 export type NewPasswordSchemaType = z.infer<typeof NewPasswordSchema>;
+export type UserDetailsSchemaType = z.infer<typeof UserDetailsSchema>;

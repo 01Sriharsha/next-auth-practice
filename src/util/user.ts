@@ -17,3 +17,12 @@ export const getUserById = async (id: string) => {
     return null;
   }
 };
+
+export const getOAuthUserAccount = async (id: string) => {
+  try {
+    const user = await db.account.findUnique({ where: { id } });
+    return user;
+  } catch (error) {
+    return null;
+  }
+};
