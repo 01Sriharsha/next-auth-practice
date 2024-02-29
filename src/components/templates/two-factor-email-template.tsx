@@ -1,16 +1,14 @@
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
   Html,
   Img,
   Preview,
-  Section,
   Text,
 } from "@react-email/components";
-import { AppLogoUrl, AppTitle, AppUrl } from "@/lib/app-constants";
+import { AppLogoUrl, AppTitle } from "@/lib/app-constants";
 
 type TwoFactorEmailTemplateProps = {
   validationCode: string;
@@ -32,16 +30,10 @@ export const TwoFactorEmailTemplate = ({
           style={logo}
         />
         <Heading style={heading}>Your login code for {AppTitle}</Heading>
-        <Section style={buttonContainer}>
-          <Button style={button} href={AppUrl}>
-            Login to {AppTitle}
-          </Button>
-        </Section>
-        <Text style={paragraph}>
-          This link and code will only be valid for the next 5 minutes. If the
-          link does not work, you can use the login verification code directly:
-        </Text>
         <code style={code}>{validationCode}</code>
+        <Text style={paragraph} className="mt-3">
+          Note: This code will only be valid for the next 5 minutes.
+        </Text>
       </Container>
     </Body>
   </Html>
@@ -79,22 +71,6 @@ const paragraph = {
   fontSize: "15px",
   lineHeight: "1.4",
   color: "#3c4149",
-};
-
-const buttonContainer = {
-  padding: "27px 0 27px",
-};
-
-const button = {
-  backgroundColor: "#5e6ad2",
-  borderRadius: "3px",
-  fontWeight: "600",
-  color: "#fff",
-  fontSize: "15px",
-  textDecoration: "none",
-  textAlign: "center" as const,
-  display: "block",
-  padding: "11px 23px",
 };
 
 const code = {

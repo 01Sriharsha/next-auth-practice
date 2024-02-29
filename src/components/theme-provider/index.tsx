@@ -40,7 +40,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       enableSystem
       disableTransitionOnChange
     >
-      <div className="dark:bg-gray-950 h-full relative">
+      <div className="dark:bg-gray-950 h-full overflow-y-auto relative">
         {children}
         <div className="absolute right-2 bottom-1">
           <ToggleTheme updateTheme={updateTheme} />
